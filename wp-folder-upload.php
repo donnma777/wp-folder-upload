@@ -4,6 +4,7 @@
  * Description: uploads の中の好きなフォルダへ、ファイルやフォルダごとアップロードします（管理者のみ）。メディアライブラリへの登録も選べます。
  * Version: 1.6.0
  * Author: donnma
+ * Author URI: https://donnma.com/
  * Plugin URI: https://github.com/donnma777/wp-folder-upload
  * License: GPLv2 or later
  * Requires PHP: 8.0
@@ -199,6 +200,11 @@ function dfu_check_svg(string $tmp) {
 // ------------------------------------------------------------
 add_action('admin_menu', function () {
 	add_media_page('フォルダにアップロード', 'フォルダにアップロード', 'manage_options', 'dfu-upload', 'dfu_render_page');
+});
+// プラグイン一覧に、使う画面へのリンクを出す
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
+	if (current_user_can('manage_options')) array_unshift($links, '<a href="' . esc_url(admin_url('upload.php?page=dfu-upload')) . '">フォルダにアップロード</a>');
+	return $links;
 });
 
 /**
